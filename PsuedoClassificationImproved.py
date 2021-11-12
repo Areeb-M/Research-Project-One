@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random.mtrand import random_integers
 import pandas as pd
+from datetime import *
 
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.feature_selection import SelectKBest, f_classif
@@ -31,8 +32,26 @@ clean_sims = [data[name] for name in sim_names]
 # High: 11, 12
 #sim_classifications = [['low', 'low', 'medium', 'medium', 'high', 'high'][int(sim['SA'].median() + sim['SA'].mode()[0]) - 7] for sim in clean_sims]
 sim_classifications = [[1, 1, 2, 2, 3, 3][int(sim['SA'].median() + sim['SA'].mode()[0]) - 7] for sim in clean_sims]
+#print(sim_part_0_average_turn_taking)
+day = date.today()
+#print((lambda x: datetime.combine(day, x.iloc[-1]) - datetime.combine(day, x.iloc[0]))(clean_sims[0][clean_sims[0]['Simulation']==3]['Time'].sort_values()).seconds)
+
+
+def calcuate_average(sim, i):
+  try:
+    return 60 * len(sim[sim['Simulation']==i+1]) / (lambda x: datetime.combine(day, x.iloc[-1]) - datetime.combine(day, x.iloc[0]))(sim[sim['Simulation']==i+1]['Time'].sort_values()).seconds
+  except:
+    return 0
+
+
+sim_average_turn_taking = [
+  sum([
+    calcuate_average(sim, i) for i in range(0, 4)
+  ]) for sim in clean_sims
+]
+
 sim_number_turns = [len(sim) for sim in clean_sims]
-sim_turn_taking = [[len(sim[sim['Turn Taking'] == i+1]) for sim in clean_sims] for i in range(0, 4)]
+sim_turn_taking = [[len(sim[sim['Turn Taking'] == i+1])for sim in clean_sims] for i in range(0, 4)]
 sim_player_sa = [[sim[sim['Turn Taking'] == i+1]['SA'].dropna().mean() for sim in clean_sims] for i in range(0, 4)]
 sim_player_sa_median = [[sim[sim['Turn Taking'] == i+1]['SA'].median() for sim in clean_sims] for i in range(0, 4)]
 sim_turn_taking_by_sa = [[len(sim[sim['SA']==i]) for sim in clean_sims] for i in range(3, 7)]
@@ -50,6 +69,7 @@ prediction_df = pd.DataFrame.from_dict(
     'Player 2 SA Average' : sim_player_sa[1],
     'Player 3 SA Average' : sim_player_sa[2],
     'Player 4 SA Average' : sim_player_sa[3],
+    'Average Turn Taking' : sim_average_turn_taking,
     'SA 3 Turn Taking': sim_turn_taking_by_sa[0],
     'SA 4 Turn Taking': sim_turn_taking_by_sa[1],
     'SA 5 Turn Taking': sim_turn_taking_by_sa[2],
