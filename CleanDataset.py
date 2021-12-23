@@ -53,6 +53,7 @@ for i in range(len(sims)):
     print(i, sim_names[i], e)
     print(sims[i])
 
+print(clean_sims[sim_names[1]])
 
 with open("clean_data.pickle", 'wb') as handle:
     pickle.dump(clean_sims, handle, protocol=pickle.HIGHEST_PROTOCOL)

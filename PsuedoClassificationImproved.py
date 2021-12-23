@@ -1,5 +1,3 @@
-import enum
-from os import name
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random.mtrand import random_integers
@@ -15,6 +13,8 @@ from sklearn import metrics
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
+
+import timeit
 
 from numpy import nan
 
@@ -84,11 +84,13 @@ x = prediction_df.drop(columns=['Performance Rank', 'Name'])
 X_train, X_test, Y_train, Y_test = train_test_split(x, y, test_size=0.25, random_state=2)
 
 
-
-
 rgr_tree = DecisionTreeRegressor(random_state=22).fit(X_train, Y_train)
+
+
 Y_pred = rgr_tree.predict(X_test)
+
 print('\n\n[ANOVA Decision Tree]')
+print("Time:", timeit.timeit('rgr_tree.predict(X_test)', globals=globals(), number=1000)/1000)
 print("R2 Score:", metrics.r2_score(Y_test, Y_pred))
 print("Mean Squared Error:", metrics.mean_squared_error(Y_test, Y_pred))
 print("Mean Absolute Error:", metrics.mean_absolute_error(Y_test, Y_pred))
@@ -100,11 +102,11 @@ for i, v in enumerate(importance):
 
 
 
-
 clf_tree = DecisionTreeClassifier(random_state=21).fit(X_train, Y_train)
 Y_pred = clf_tree.predict(X_test)
 
 print("\n\n[Decision Tree Classifier]")
+print("Time:", timeit.timeit('clf_tree.predict(X_test)', globals=globals(), number=1000)/1000)
 
 print("Accuracy:", metrics.accuracy_score(Y_test, Y_pred))
 print("Confusion Matrix:\n",metrics.confusion_matrix(Y_test, Y_pred))
@@ -126,6 +128,7 @@ clf = RandomForestClassifier(random_state=2).fit(X_train, Y_train)
 Y_pred = clf.predict(X_test)
 
 print("\n\n[Random Forest Classifier]")
+print("Time:", timeit.timeit('clf.predict(X_test)', globals=globals(), number=1000)/1000)
 
 print("Accuracy:", metrics.accuracy_score(Y_test, Y_pred))
 print("Confusion Matrix:\n",metrics.confusion_matrix(Y_test, Y_pred))
@@ -143,7 +146,7 @@ for i, v in enumerate(importance):
 
 test = SelectKBest(score_func=f_classif, k=5)
 fit = test.fit(X_train, Y_train)
-print("\n\n[ANOVA F Value Feature Scores]")
+print("\n\n[ANOVA F Value Feature Scores]") 
 # summarize scores
 for s in fit.scores_:
   print("\t\t", s)
@@ -155,6 +158,7 @@ print(fit.get_feature_names_out())
 rgr_tree = RandomForestRegressor(random_state=22).fit(X_train, Y_train)
 Y_pred = rgr_tree.predict(X_test)
 print('\n\n[Random Forest Regressor]')
+print("Time:", timeit.timeit('rgr_tree.predict(X_test)', globals=globals(), number=1000)/1000)
 print("R2 Score:", metrics.r2_score(Y_test, Y_pred))
 print("Mean Squared Error:", metrics.mean_squared_error(Y_test, Y_pred))
 print("Mean Absolute Error:", metrics.mean_absolute_error(Y_test, Y_pred))
@@ -169,6 +173,7 @@ for i, v in enumerate(importance):
 clf = make_pipeline(StandardScaler(), SVC(gamma='auto'))
 clf.fit(X_train, Y_train)
 print("\n\n[SVM Classifier]")
+print("Time:", timeit.timeit('clf.predict(X_test)', globals=globals(), number=1000)/1000)
 print(clf.score(X_test, Y_test))
 
 test = SelectKBest(score_func=f_classif, k=5)
@@ -181,6 +186,7 @@ ky_test = Y_test
 
 clf.fit(kx_train, ky_train)
 print("\n\n[SVM Classifier - K Best]")
+print("Time:", timeit.timeit('clf.predict(kx_test)', globals=globals(), number=1000)/1000)
 print(clf.score(kx_test, ky_test))
 
 
@@ -189,10 +195,12 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 clf = MLPClassifier(random_state=2)
 clf.fit(X_train, Y_train)
 print("\n\n[MLP Classifier - Adam]")
+print("Time:", timeit.timeit('clf.predict(X_test)', globals=globals(), number=1000)/1000)
 print(clf.score(X_test, Y_test))
 
 
 clf = MLPClassifier(solver="lbfgs", random_state=2)
 clf.fit(X_train, Y_train)
 print("\n\n[MLP Classifier - LBFGS]")
+print("Time:", timeit.timeit('clf.predict(X_test)', globals=globals(), number=1000)/1000)
 print(clf.score(X_test, Y_test))
