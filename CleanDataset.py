@@ -19,6 +19,10 @@ sims_2.pop(0) # remote the metadata sheet
 sims = sims_1 + sims_2
 sim_names = xls1.sheet_names[1:] + xls2.sheet_names[1:]
 
+def rn(df, suffix = '-duplicate-'):
+    appendents = (suffix + df.groupby(level=0).cumcount().astype(str)).replace(suffix, '')
+    return df.set_index(df.index + appendents)
+
 def clean_sim_data(sim_df):
   sim_df = sim_df.rename(columns={0:"Turn Taking", 1:"Time", 2:"Total", 3:"Simulation", 4:"SA Team"})
   sim_df = sim_df[sim_df["Turn Taking"].notna()]
@@ -40,6 +44,11 @@ def clean_sim_data(sim_df):
     sim_df['SA'] = sim_df['SA Team'].apply(lambda x: eval(str(x))[0])
   
   sim_df = sim_df.drop(columns=["SA Team"])
+
+  if not sim_df.index.is_unique:
+    #print(sim_df.index.duplicated())
+    #input()
+    sim_df = sim_df.set_index(pd.Series(range(0, len(sim_df))))
 
   return sim_df
 

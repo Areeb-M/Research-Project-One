@@ -1,0 +1,9 @@
+,Name,Accuracy,Number of Turns,Player 1 Turn Taking,Player 2 Turn Taking,Player 3 Turn Taking,Player 4 Turn Taking,Player 1 SA Average,Player 2 SA Average,Player 3 SA Average,Player 4 SA Average,Average Turn Taking,SA 3 Turn Taking,SA 4 Turn Taking,SA 5 Turn Taking,SA 6 Turn Taking,Mean Sentiment,Delta Sentiment,Mean Start Sentiment
+0,SVM RBF,0.7,,,,,,,,,,,,,,,,,
+0,SVM Linear,0.65,,,,,,,,,,,,,,,,,
+0,SVM Poly,0.7,,,,,,,,,,,,,,,,,
+0,Gaussian Naive Bayes,0.75,,,,,,,,,,,,,,,,,
+0,Bernoulli Naive Bayes,0.5,,,,,,,,,,,,,,,,,
+0,MLP Classifier,0.55,,,,,,,,,,,,,,,,,
+0,Random Forest Classifier,0.85,0.03781485261818409,0.04336398719322964,0.04077697507364952,0.030698221888534417,0.026091436276669832,0.09227564289728958,0.09598483119009375,0.1026610705379807,0.09921825364174415,0.05666822887918751,0.05499013681445144,0.06783585716440088,0.048260836773128556,0.06818507620266362,0.04942163968206475,0.03995265900170052,0.045800294165027074
+0,Decision Tree Classifier,0.65,0.0,0.0,0.0,0.0,0.14530688949293608,0.0,0.28386858619416755,0.13781223083548663,0.20045415394252603,0.12919896640826875,0.0,0.0,0.0,0.0,0.10335917312661498,0.0,0.0

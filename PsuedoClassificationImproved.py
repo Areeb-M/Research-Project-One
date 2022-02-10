@@ -58,7 +58,6 @@ sim_turn_taking_by_sa = [[len(sim[sim['SA']==i]) for sim in clean_sims] for i in
 
 prediction_df = pd.DataFrame.from_dict(
   {
-    
     'Name' : sim_names,
     'Number of Turns' : sim_number_turns,
     'Player 1 Turn Taking' : sim_turn_taking[0],
@@ -77,6 +76,9 @@ prediction_df = pd.DataFrame.from_dict(
     'Performance Rank': sim_classifications
   }
 ).fillna(0)
+
+with open("prediction_df.pickle", 'wb') as handle:
+    pickle.dump(prediction_df, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 y = prediction_df['Performance Rank']
 x = prediction_df.drop(columns=['Performance Rank', 'Name'])
